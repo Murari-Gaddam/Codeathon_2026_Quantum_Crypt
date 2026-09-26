@@ -1,0 +1,74 @@
+[
+  {
+    "id": "lib-py-cryptography",
+    "language": "python",
+    "name": "cryptography",
+    "package_names": ["cryptography"],
+    "imports": ["cryptography", "cryptography.hazmat"],
+    "pqc_status": "Partial/Experimental via OpenSSL 3.x / oqs-provider integration",
+    "migration_guidance": "Upgrade to latest version supporting OpenSSL 3.2+ provider ecosystem or hybrid providers"
+  },
+  {
+    "id": "lib-py-pycryptodome",
+    "language": "python",
+    "name": "pycryptodome",
+    "package_names": ["pycryptodome", "pycryptodomex"],
+    "imports": ["Crypto.Cipher", "Crypto.PublicKey", "Crypto.Signature", "Crypto.Hash"],
+    "pqc_status": "Classical only",
+    "migration_guidance": "Assess migration to high-level crypto providers supporting post-quantum primitives"
+  },
+  {
+    "id": "lib-py-pyjwt",
+    "language": "python",
+    "name": "PyJWT",
+    "package_names": ["PyJWT", "pyjwt"],
+    "imports": ["jwt"],
+    "pqc_status": "Classical JWS algorithms (RS256, ES256, EdDSA)",
+    "migration_guidance": "Evaluate composite signature JOSE drafts (RFC 9449, IETF composite keys) for token signing"
+  },
+  {
+    "id": "lib-node-crypto",
+    "language": "javascript",
+    "name": "node:crypto",
+    "package_names": [],
+    "imports": ["crypto", "node:crypto"],
+    "pqc_status": "Classical built-in; experimental ML-KEM/ML-DSA in upcoming Node versions with OpenSSL 3.5+",
+    "migration_guidance": "Wrap crypto operations behind a crypto provider abstraction to allow provider swapping"
+  },
+  {
+    "id": "lib-node-jsonwebtoken",
+    "language": "javascript",
+    "name": "jsonwebtoken",
+    "package_names": ["jsonwebtoken"],
+    "imports": ["jsonwebtoken"],
+    "pqc_status": "Classical token signing (RS256, HS256, ES256)",
+    "migration_guidance": "Prepare for PQC signature token validation and larger token header/payload sizes"
+  },
+  {
+    "id": "lib-node-jose",
+    "language": "javascript",
+    "name": "jose",
+    "package_names": ["jose"],
+    "imports": ["jose"],
+    "pqc_status": "Modern JOSE implementation; tracking IETF composite JWS specifications",
+    "migration_guidance": "Utilize crypto-agility interfaces to support algorithm negotiation"
+  },
+  {
+    "id": "lib-java-bouncycastle",
+    "language": "java",
+    "name": "BouncyCastle",
+    "package_names": ["org.bouncycastle:bcprov-jdk18on", "org.bouncycastle:bcpkix-jdk18on"],
+    "imports": ["org.bouncycastle.pqc", "org.bouncycastle.crypto"],
+    "pqc_status": "Comprehensive PQC support (ML-KEM, ML-DSA, Falcon, SPHINCS+, Classic McEliece)",
+    "migration_guidance": "Standard reference provider for PQC migration in JVM environments"
+  },
+  {
+    "id": "lib-go-crypto",
+    "language": "go",
+    "name": "golang/crypto",
+    "package_names": ["golang.org/x/crypto"],
+    "imports": ["crypto/rsa", "crypto/ecdsa", "crypto/tls", "golang.org/x/crypto"],
+    "pqc_status": "Go standard library includes experimental X25519Kyber768 hybrid in crypto/tls",
+    "migration_guidance": "Enable hybrid TLS key exchange in modern Go runtime (1.23+)"
+  }
+]

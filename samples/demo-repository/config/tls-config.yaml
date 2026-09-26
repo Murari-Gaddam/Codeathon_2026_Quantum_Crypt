@@ -1,0 +1,25 @@
+server:
+  host: 0.0.0.0
+  port: 8443
+  component: "api-gateway"
+
+tls:
+  enabled: true
+  min_version: "TLSv1.2"
+  max_version: "TLSv1.3"
+  cipher_suites:
+    - "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384"
+    - "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384"
+    - "TLS_AES_256_GCM_SHA384"
+  certificate_path: "certificates/server.pem"
+  ca_bundle_path: "certificates/ca.pem"
+  curve_preferences:
+    - "secp256r1"
+    - "x25519"
+  # Notice: hybrid groups (e.g. X25519MLKEM768) not yet configured
+
+jwt:
+  issuer: "https://identity.enterprise.internal"
+  algorithm: "RS256"
+  key_size: 2048
+  token_expiry_seconds: 3600

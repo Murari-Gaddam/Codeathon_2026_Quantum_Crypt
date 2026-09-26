@@ -1,0 +1,30 @@
+{
+  "policy_name": "enterprise-pqc-governance",
+  "version": "1.0.0",
+  "rules": {
+    "fail_on": [
+      "newly_introduced_deprecated_algorithm",
+      "hardcoded_private_key_detected",
+      "weak_key_size_rsa_under_2048",
+      "tls_1_0_or_1_1_enabled"
+    ],
+    "warn_on": [
+      "new_classical_asymmetric_dependency",
+      "unvetted_crypto_library",
+      "missing_pqc_migration_plan_for_high_priority",
+      "certificate_rsa_without_hybrid_timeline"
+    ],
+    "review_thresholds": {
+      "asymmetric_unreviewed_max": 0,
+      "unpinned_dependencies": true
+    }
+  },
+  "deprecated_algorithms": [
+    "DES",
+    "3DES",
+    "RC4",
+    "MD5",
+    "SHA-1",
+    "DSA"
+  ]
+}

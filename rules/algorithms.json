@@ -1,0 +1,232 @@
+[
+  {
+    "id": "rsa-asymmetric",
+    "mechanism": "RSA",
+    "category": "asymmetric",
+    "description": "Rivest-Shamir-Adleman asymmetric cryptosystem used for key transport, digital signatures, and key exchange.",
+    "quantum_impact": "Vulnerable to Shor's algorithm for polynomial-time integer factorization.",
+    "migration_priority": "high",
+    "migration_role": "digital_signature_or_kem",
+    "recommended_pqc_replacement": "ML-KEM-768 for KEM / key transport; ML-DSA-65 or Composite Hybrid for digital signatures",
+    "key_size_concerns": {
+      "1024": "Critically deprecated classically and quantum-vulnerable.",
+      "2048": "Classically acceptable until ~2030, vulnerable to CRQC (Cryptanalytically Relevant Quantum Computer).",
+      "3072": "Classically strong (128-bit security), vulnerable to CRQC.",
+      "4096": "Classically strong, vulnerable to CRQC, performance overhead."
+    },
+    "patterns": [
+      "RSA\\.generate",
+      "PKCS1_OAEP",
+      "PKCS1_v1_5",
+      "rsa\\.generateKeyPair",
+      "RSA_PKCS1_PADDING",
+      "RSASSA-PKCS1-v1_5",
+      "RSASSA-PSS",
+      "KeyPairGenerator\\.getInstance\\([\"']RSA[\"']\\)",
+      "crypto/rsa",
+      "rsa\\.GenerateKey"
+    ]
+  },
+  {
+    "id": "ecdsa-signature",
+    "mechanism": "ECDSA",
+    "category": "asymmetric",
+    "description": "Elliptic Curve Digital Signature Algorithm.",
+    "quantum_impact": "Vulnerable to Shor's algorithm for discrete logarithms over elliptic curves.",
+    "migration_priority": "high",
+    "migration_role": "digital_signature",
+    "recommended_pqc_replacement": "ML-DSA-65 (FIPS 204) or SLH-DSA (FIPS 205) or Composite Hybrid ECDSA+ML-DSA",
+    "patterns": [
+      "ec\\.generate_private_key",
+      "ECDSA",
+      "secp256r1",
+      "prime256v1",
+      "secp384r1",
+      "secp521r1",
+      "secp256k1",
+      "KeyPairGenerator\\.getInstance\\([\"']EC[\"']\\)",
+      "crypto/ecdsa",
+      "ecdsa\\.GenerateKey"
+    ]
+  },
+  {
+    "id": "ecdh-key-exchange",
+    "mechanism": "ECDH",
+    "category": "key_exchange",
+    "description": "Elliptic Curve Diffie-Hellman key exchange mechanism.",
+    "quantum_impact": "Vulnerable to 'Harvest Now, Decrypt Later' (HNDL) attacks via Shor's algorithm.",
+    "migration_priority": "critical",
+    "migration_role": "key_exchange",
+    "recommended_pqc_replacement": "ML-KEM-768 (FIPS 203) or Hybrid X25519+ML-KEM-768",
+    "patterns": [
+      "ECDH",
+      "exchange\\(ec\\.ECDH\\(\\)",
+      "createECDH",
+      "KeyAgreement\\.getInstance\\([\"']ECDH[\"']\\)",
+      "crypto/ecdh"
+    ]
+  },
+  {
+    "id": "dh-key-exchange",
+    "mechanism": "Diffie-Hellman",
+    "category": "key_exchange",
+    "description": "Classical finite field Diffie-Hellman key agreement.",
+    "quantum_impact": "Vulnerable to Shor's algorithm for discrete logarithms.",
+    "migration_priority": "critical",
+    "migration_role": "key_exchange",
+    "recommended_pqc_replacement": "ML-KEM-768 or Hybrid X25519+ML-KEM",
+    "patterns": [
+      "DiffieHellman",
+      "dh\\.generate_parameters",
+      "KeyAgreement\\.getInstance\\([\"']DH[\"']\\)"
+    ]
+  },
+  {
+    "id": "ed25519-signature",
+    "mechanism": "Ed25519",
+    "category": "asymmetric",
+    "description": "Edwards-curve Digital Signature Algorithm over Curve25519.",
+    "quantum_impact": "Vulnerable to Shor's algorithm for elliptic curve discrete log.",
+    "migration_priority": "medium",
+    "migration_role": "digital_signature",
+    "recommended_pqc_replacement": "ML-DSA-65 or Composite Ed25519+ML-DSA-65",
+    "patterns": [
+      "Ed25519PrivateKey",
+      "ed25519\\.GenerateKey",
+      "ed25519"
+    ]
+  },
+  {
+    "id": "ed448-signature",
+    "mechanism": "Ed448",
+    "category": "asymmetric",
+    "description": "Edwards-curve Digital Signature Algorithm over Curve448.",
+    "quantum_impact": "Vulnerable to Shor's algorithm.",
+    "migration_priority": "medium",
+    "migration_role": "digital_signature",
+    "recommended_pqc_replacement": "ML-DSA-87",
+    "patterns": [
+      "Ed448PrivateKey",
+      "ed448"
+    ]
+  },
+  {
+    "id": "dsa-signature",
+    "mechanism": "DSA",
+    "category": "asymmetric",
+    "description": "Digital Signature Algorithm (legacy).",
+    "quantum_impact": "Classically deprecated and completely vulnerable to Shor's algorithm.",
+    "migration_priority": "immediate",
+    "migration_role": "digital_signature",
+    "recommended_pqc_replacement": "ML-DSA or Ed25519 transition",
+    "patterns": [
+      "DSA\\.generate",
+      "KeyPairGenerator\\.getInstance\\([\"']DSA[\"']\\)",
+      "crypto/dsa"
+    ]
+  },
+  {
+    "id": "aes-symmetric",
+    "mechanism": "AES",
+    "category": "symmetric",
+    "description": "Advanced Encryption Standard block cipher.",
+    "quantum_impact": "Grover's algorithm halves effective key strength: AES-128 drops to ~64-bit quantum security; AES-256 maintains 128-bit quantum security.",
+    "migration_priority": "low_to_medium",
+    "migration_role": "symmetric_encryption",
+    "recommended_pqc_replacement": "Transition AES-128 to AES-256-GCM for post-quantum resistance",
+    "patterns": [
+      "AES\\.new",
+      "AES-GCM",
+      "AES-CBC",
+      "AES-CTR",
+      "createCipheriv\\(['\"]aes-",
+      "Cipher\\.getInstance\\([\"']AES"
+    ]
+  },
+  {
+    "id": "3des-symmetric",
+    "mechanism": "3DES",
+    "category": "symmetric",
+    "description": "Triple Data Encryption Algorithm (legacy block cipher).",
+    "quantum_impact": "Classically weak (Sweet32 vulnerability) and further weakened by Grover's algorithm.",
+    "migration_priority": "immediate",
+    "migration_role": "symmetric_encryption",
+    "recommended_pqc_replacement": "Migrate to AES-256-GCM immediately",
+    "patterns": [
+      "DES3",
+      "TripleDES",
+      "des-ede3",
+      "Cipher\\.getInstance\\([\"']DESede"
+    ]
+  },
+  {
+    "id": "sha1-hash",
+    "mechanism": "SHA-1",
+    "category": "hash",
+    "description": "Secure Hash Algorithm 1 (broken collision resistance).",
+    "quantum_impact": "Classically broken collision resistance; unacceptable in signatures and certificates.",
+    "migration_priority": "immediate",
+    "migration_role": "hash_function",
+    "recommended_pqc_replacement": "Migrate to SHA-256, SHA-384, or SHA3-256",
+    "patterns": [
+      "hashlib\\.sha1",
+      "SHA1",
+      "MessageDigest\\.getInstance\\([\"']SHA-1[\"']\\)",
+      "crypto/sha1"
+    ]
+  },
+  {
+    "id": "sha256-hash",
+    "mechanism": "SHA-256",
+    "category": "hash",
+    "description": "SHA-2 family 256-bit cryptographic hash function.",
+    "quantum_impact": "Collision search cost drops to 2^128 using quantum algorithms, providing robust quantum security.",
+    "migration_priority": "info",
+    "migration_role": "hash_function",
+    "recommended_pqc_replacement": "Post-quantum safe; retain or upgrade to SHA-384/512 or SHA3-256",
+    "patterns": [
+      "hashlib\\.sha256",
+      "SHA256",
+      "MessageDigest\\.getInstance\\([\"']SHA-256[\"']\\)",
+      "crypto/sha256"
+    ]
+  },
+  {
+    "id": "ml-kem-pqc",
+    "mechanism": "ML-KEM",
+    "category": "pqc_kem",
+    "description": "Module-Lattice-Based Key-Encapsulation Mechanism (NIST FIPS 203, based on Kyber).",
+    "quantum_impact": "Quantum-resistant lattice-based key encapsulation.",
+    "migration_priority": "info",
+    "migration_role": "pqc_reference",
+    "recommended_pqc_replacement": "Target standard for post-quantum key exchange / KEM",
+    "patterns": [
+      "ML-KEM",
+      "Kyber512",
+      "Kyber768",
+      "Kyber1024",
+      "ML-KEM-512",
+      "ML-KEM-768",
+      "ML-KEM-1024"
+    ]
+  },
+  {
+    "id": "ml-dsa-pqc",
+    "mechanism": "ML-DSA",
+    "category": "pqc_signature",
+    "description": "Module-Lattice-Based Digital Signature Algorithm (NIST FIPS 204, based on Dilithium).",
+    "quantum_impact": "Quantum-resistant lattice-based digital signatures.",
+    "migration_priority": "info",
+    "migration_role": "pqc_reference",
+    "recommended_pqc_replacement": "Target standard for post-quantum digital signatures",
+    "patterns": [
+      "ML-DSA",
+      "Dilithium2",
+      "Dilithium3",
+      "Dilithium5",
+      "ML-DSA-44",
+      "ML-DSA-65",
+      "ML-DSA-87"
+    ]
+  }
+]
